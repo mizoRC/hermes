@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  mongo:
+    ports:
+      - '27017:27017'
+    container_name: mongodb
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=hermes
+      - MONGO_INITDB_ROOT_PASSWORD=MqxLMHa7iHCsaeqe
+    image: mongo:latest
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  mongodb_data:
