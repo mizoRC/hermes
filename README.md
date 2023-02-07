@@ -12,9 +12,11 @@
   <a href="https://goreportcard.com/report/github.com/Dreamacro/clash">
     <img src="https://goreportcard.com/badge/github.com/Dreamacro/clash?style=for-the-badge">
   </a>
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white">
   <img src="https://img.shields.io/github/go-mod/go-version/Dreamacro/clash?style=for-the-badge&logo=appveyor"> -->
   <img src="https://img.shields.io/github/go-mod/go-version/mizoRC/hermes/main?label=GO&style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white">
+  <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white">
+  
 </p>
 
 ## Features

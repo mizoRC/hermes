@@ -1,33 +1,37 @@
 package db
 
 import (
-	"context"
 	. "github.com/councilbox/hermes/logger"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"os"
 )
 
-var Db *mongo.Client
+var Db *gorm.DB
 
 func Status() bool {
-	err := Db.Ping(context.TODO(), readpref.Primary())
-	if err != nil {
+	if client, err := Db.DB(); err != nil {
 		log.Fatalf("Error connecting to db database: %v", err)
 		return false
 	} else {
-		return true
+		if pingErr := client.Ping(); pingErr != nil {
+			log.Fatalf("Error connecting to db database: %v", err)
+			return false
+		} else {
+			return true
+		}
 	}
 }
 
 func Connect() error {
-	var mongodbURI string = os.Getenv("MONGO_URL")
-	Logger.Info("Trying to connect MongoDB")
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(mongodbURI))
-	pingErr := client.Ping(context.TODO(), readpref.Primary())
-	if err != nil || pingErr != nil {
+	var postgresURI string = os.Getenv("POSTGRES_URL")
+	Logger.Info("Trying to connect DB")
+	client, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  postgresURI,
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+	if err != nil {
 		return err
 	} else {
 		Db = client
@@ -36,7 +40,9 @@ func Connect() error {
 }
 
 func Disconnect() {
-	if err := Db.Disconnect(context.Background()); err != nil {
+	if client, err := Db.DB(); err != nil {
 		panic(err)
+	} else {
+		client.Close()
 	}
 }

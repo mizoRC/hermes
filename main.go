@@ -29,7 +29,7 @@ func main() {
 	dbErr := db.Connect()
 
 	if dbErr == nil {
-		logger.Logger.Info("MongoDB connected")
+		logger.Logger.Info("DB connected")
 		runningMsg := fmt.Sprintf("Hermes v%s running on  http://0.0.0.0%s", VERSION, port)
 		logger.Logger.Info(runningMsg)
 
@@ -43,6 +43,6 @@ func main() {
 			log.Fatalf("Error running server: %v", err)
 		}
 	} else {
-		log.Fatalf("Error connecting mongoDB: %v", dbErr)
+		log.Fatalf("Error connecting db: %v", dbErr)
 	}
 }
