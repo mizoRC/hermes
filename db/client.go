@@ -8,10 +8,10 @@ import (
 	"os"
 )
 
-var Db *gorm.DB
+var Client *gorm.DB
 
 func Status() bool {
-	if client, err := Db.DB(); err != nil {
+	if client, err := Client.DB(); err != nil {
 		log.Fatalf("Error connecting to db database: %v", err)
 		return false
 	} else {
@@ -34,13 +34,13 @@ func Connect() error {
 	if err != nil {
 		return err
 	} else {
-		Db = client
+		Client = client
 		return nil
 	}
 }
 
 func Disconnect() {
-	if client, err := Db.DB(); err != nil {
+	if client, err := Client.DB(); err != nil {
 		panic(err)
 	} else {
 		client.Close()

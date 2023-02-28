@@ -1,48 +1,46 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/councilbox/hermes/db"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 )
 
-type Message struct {
-	ID             uint `gorm:"primary_key"`
-	Space_id       uint
-	Participant_id uint
-	Text           string
-	Created_at     time.Time `gorm:"default:current_timestamp"`
+type Space struct {
+	ID         uint `gorm:"primary_key"`
+	Name       string
+	Created_at time.Time `gorm:"default:current_timestamp"`
 }
 
-func getAllMessages(c *gin.Context) {
-	var messages []Message
-	result := db.Client.Find(&messages)
+func getAllSpaces(c *gin.Context) {
+	var spaces []Space
+	result := db.Client.Find(&spaces)
 	if result.Error == nil {
 		c.JSON(http.StatusOK, gin.H{
-			"messages": messages,
+			"spaces": spaces,
 		})
 	} else {
 		c.String(http.StatusBadRequest, result.Error.Error())
 	}
 }
 
-func getSpaceMessages(c *gin.Context) {
-	var messages []Message
+func getSpace(c *gin.Context) {
+	var space Space
 	spaceID := c.Query("spaceID")
-	result := db.Client.First(&messages, spaceID)
-	db.Client.Where("space_id = ?", spaceID).Find(&messages)
+	result := db.Client.First(&space, spaceID)
 
 	if result.Error == nil {
 		c.JSON(http.StatusOK, gin.H{
-			"messages": messages,
+			"space": space,
 		})
 	} else {
 		c.String(http.StatusBadRequest, result.Error.Error())
 	}
 }
 
-/*func addMessage(c *gin.Context) {
+func createSpace(c *gin.Context) {
 	name := c.PostForm("name")
 	space := Space{
 		Name: name,
@@ -61,10 +59,10 @@ func getSpaceMessages(c *gin.Context) {
 	} else {
 		c.String(http.StatusBadRequest, result.Error.Error())
 	}
-}*/
+}
 
-func MessageRoutes(rg *gin.RouterGroup) {
-	rg.GET("/all", getAllMessages)
-	rg.GET("/space", getSpaceMessages)
-	//rg.POST("/add", addMessage)
+func SpaceRoutes(rg *gin.RouterGroup) {
+	rg.GET("/all", getAllSpaces)
+	rg.GET("/get", getSpace)
+	rg.POST("/create", createSpace)
 }
